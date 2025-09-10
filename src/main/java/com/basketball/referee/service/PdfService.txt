@@ -1,0 +1,138 @@
+package com.basketball.referee.service;
+
+import com.basketball.referee.model.Referee;
+import com.basketball.referee.model.MatchAssignment;
+import com.basketball.referee.service.SettlementService.SettlementData;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.time.format.DateTimeFormatter;
+import java.util.Map;
+
+@Service
+public class PdfService {
+
+    @Autowired
+    private RefereeService refereeService;
+
+    public byte[] generateSettlementPdf(SettlementData settlement) throws DocumentException, IOException {
+        Document document = new Document(PageSize.A4);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PdfWriter writer = PdfWriter.getInstance(document, baos);
+
+        document.open();
+
+        // Get referee information
+        Referee referee = refereeService.findById(settlement.getRefereeId()).orElse(null);
+        if (referee == null) {
+            throw new RuntimeException("Árbitro no encontrado");
+        }
+
+        // Fonts
+        Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLACK);
+        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, BaseColor.BLACK);
+        Font normalFont = FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.BLACK);
+
+        // Title
+        Paragraph title = new Paragraph("LIQUIDACIÓN DE PAGOS", titleFont);
+        title.setAlignment(Element.ALIGN_CENTER);
+        title.setSpacingAfter(20);
+        document.add(title);
+
+        // Referee information
+        PdfPTable infoTable = new PdfPTable(2);
+        infoTable.setWidthPercentage(100);
+        infoTable.setSpacingAfter(20);
+
+        addCell(infoTable, "Árbitro:", headerFont);
+        addCell(infoTable, referee.getUser().getFullName(), normalFont);
+        
+        addCell(infoTable, "Escalafón:", headerFont);
+        addCell(infoTable, referee.getRank().getDisplayName(), normalFont);
+        
+        addCell(infoTable, "Specialty:", headerFont);
+        addCell(infoTable, referee.getSpecialty().getDisplayName(), normalFont);
+        
+        addCell(infoTable, "Período:", headerFont);
+        addCell(infoTable, settlement.getYearMonth().format(DateTimeFormatter.ofPattern("MMMM yyyy")), normalFont);
+
+        document.add(infoTable);
+
+        // Summary by role
+        Paragraph summaryTitle = new Paragraph("RESUMEN POR ROL", headerFont);
+        summaryTitle.setSpacingAfter(10);
+        document.add(summaryTitle);
+
+        PdfPTable summaryTable = new PdfPTable(3);
+        summaryTable.setWidthPercentage(100);
+        summaryTable.setSpacingAfter(20);
+
+        // Headers
+        addCell(summaryTable, "Role", headerFont);
+        addCell(summaryTable, "Matches", headerFont);
+        addCell(summaryTable, "Amount", headerFont);
+
+        for (Map.Entry<String, Integer> entry : settlement.getMatchesByRole().entrySet()) {
+            String role = entry.getKey();
+            Integer matches = entry.getValue();
+            BigDecimal amount = settlement.getAmountsByRole().getOrDefault(role, BigDecimal.ZERO);
+
+            addCell(summaryTable, role, normalFont);
+            addCell(summaryTable, matches.toString(), normalFont);
+            addCell(summaryTable, "$" + amount.toString(), normalFont);
+        }
+
+        document.add(summaryTable);
+
+        // Detailed assignments
+        Paragraph detailTitle = new Paragraph("DETALLE DE PARTIDOS", headerFont);
+        detailTitle.setSpacingAfter(10);
+        document.add(detailTitle);
+
+        PdfPTable detailTable = new PdfPTable(5);
+        detailTable.setWidthPercentage(100);
+        detailTable.setSpacingAfter(20);
+
+        // Headers
+        addCell(detailTable, "Date", headerFont);
+        addCell(detailTable, "Match", headerFont);
+        addCell(detailTable, "Tournament", headerFont);
+        addCell(detailTable, "Role", headerFont);
+        addCell(detailTable, "Amount", headerFont);
+
+        for (MatchAssignment assignment : settlement.getAssignments()) {
+            BigDecimal payment = feeService.calculatePayment(assignment);
+            
+            addCell(detailTable, assignment.getMatch().getDateHour().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), normalFont);
+            addCell(detailTable, assignment.getMatch().getLocalTeam() + " vs " + assignment.getMatch().getVisitorTeam(), normalFont);
+            addCell(detailTable, assignment.getMatch().getTournament().getName(), normalFont);
+            addCell(detailTable, assignment.getRol().getDisplayName(), normalFont);
+            addCell(detailTable, "$" + payment.toString(), normalFont);
+        }
+
+        document.add(detailTable);
+
+        // Total
+        Paragraph total = new Paragraph("TOTAL A PAGAR: $" + settlement.getTotalAmount().toString(), titleFont);
+        total.setAlignment(Element.ALIGN_RIGHT);
+        total.setSpacingBefore(20);
+        document.add(total);
+
+        document.close();
+        return baos.toByteArray();
+    }
+
+    @Autowired
+    private FeeService feeService;
+
+    private void addCell(PdfPTable table, String text, Font font) {
+        PdfPCell cell = new PdfPCell(new Phrase(text, font));
+        cell.setPadding(8);
+        table.addCell(cell);
+    }
+}
