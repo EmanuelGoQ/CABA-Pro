@@ -45,20 +45,27 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(authz -> authz
-                // Public resources
+                // Public assets
                 .requestMatchers("/css/**", "/js/**", "/images/**", "/uploads/**").permitAll()
                 .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/login", "/register", "/").permitAll()
-                
+
+                // ✅ API pública temporalmente (la aseguraremos luego con JWT)
+                .requestMatchers("/api/**").permitAll()
+
+                // ✅ Swagger / OpenAPI
+                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+
                 // Admin routes
                 .requestMatchers("/admin/**").hasRole("ADMIN")
-                
-                // Referee routes
+
+                // Referee routes (web views)
                 .requestMatchers("/dashboard", "/profile", "/assignments/**").hasAnyRole("REFEREE", "ADMIN")
-                
+
                 // All other requests require authentication
                 .anyRequest().authenticated()
             )
+
             .formLogin(form -> form
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
