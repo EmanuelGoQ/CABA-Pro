@@ -4,13 +4,13 @@
       layout:decorate="~{layout/base}">
 
 <head>
-    <title th:text="${title}">Detalles del Torneo</title>
+    <title th:text="#{tournament.details.title}">Detalles del Torneo</title>
 </head>
 
 <body>
 <div layout:fragment="content">
     <div class="container mt-4">
-        <h1 th:text="${title}">Detalles del Torneo</h1>
+        <h1 th:text="#{tournament.details.heading}">Detalles del Torneo</h1>
 
         <div class="card mt-3">
             <div class="card-body">
@@ -19,39 +19,41 @@
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label class="form-label fw-bold">Fecha de inicio:</label>
+                        <label class="form-label fw-bold" th:text="#{tournament.details.startDate}">Fecha de inicio:</label>
                         <p th:text="${tournament.startDate}">-</p>
                     </div>
 
                     <div class="col-md-6 mb-3">
-                        <label class="form-label fw-bold">Fecha de fin:</label>
+                        <label class="form-label fw-bold" th:text="#{tournament.details.endDate}">Fecha de fin:</label>
                         <p th:text="${tournament.endDate}">-</p>
                     </div>
 
                     <div class="col-md-6 mb-3">
-                        <label class="form-label fw-bold">Estado:</label>
+                        <label class="form-label fw-bold" th:text="#{tournament.details.state}">Estado:</label>
                         <p th:text="${tournament.state.displayName}">-</p>
                     </div>
 
                     <div class="col-md-6 mb-3">
-                        <label class="form-label fw-bold">Activo:</label>
-                        <p th:text="${tournament.active ? 'Sí' : 'No'}">-</p>
+                        <label class="form-label fw-bold" th:text="#{tournament.details.active}">Activo:</label>
+                        <p th:text="${tournament.active ? #{yes} : #{no}}">-</p>
                     </div>
 
                     <div class="col-md-6 mb-3">
-                        <label class="form-label fw-bold">Creado en:</label>
+                        <label class="form-label fw-bold" th:text="#{tournament.details.createdAt}">Creado en:</label>
                         <p th:text="${#temporals.format(tournament.createdAt, 'dd/MM/yyyy HH:mm')}">-</p>
                     </div>
 
                     <div class="col-md-6 mb-3">
-                        <label class="form-label fw-bold">Última actualización:</label>
+                        <label class="form-label fw-bold" th:text="#{tournament.details.updatedAt}">Última actualización:</label>
                         <p th:text="${#temporals.format(tournament.updatedAt, 'dd/MM/yyyy HH:mm')}">-</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <a th:href="@{/admin/tournaments}" class="btn btn-secondary mt-3">Volver a la lista</a>
+        <a th:href="@{/admin/tournaments}" class="btn btn-secondary mt-3" th:text="#{tournament.details.back}">
+            Volver a la lista
+        </a>
     </div>
 </div>
 </body>
