@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.basketball.referee.model.ClimaData;
 import com.basketball.referee.model.Court;
 import com.basketball.referee.model.Match;
 import com.basketball.referee.model.MatchAssignment;
@@ -35,6 +36,7 @@ import com.basketball.referee.service.MatchService;
 import com.basketball.referee.service.RefereeService;
 import com.basketball.referee.service.TournamentService;
 import com.basketball.referee.service.UserService;
+import com.basketball.referee.service.WeatherService;
 
 import jakarta.validation.Valid;
 
@@ -63,6 +65,9 @@ public class AdminController {
     
     @Autowired
     private GradeService gradeService;
+
+    @Autowired
+    private WeatherService weatherService;
 
     // Dashboard
     @GetMapping("/dashboard")
@@ -420,6 +425,40 @@ public class AdminController {
         return "admin/courts/form";
     }
 
+    @GetMapping("/courts/{id}")
+    public String viewCourt(Model model, @PathVariable Long id) {
+        Optional<Court> courtOpt = courtService.findById(id);
+        Court court = courtOpt.orElse(null);
+
+        if (court == null) {
+            return "redirect:/admin/courts";
+        }
+
+        // --- Lógica para obtener y añadir el Clima ---
+        String city = court.getCity();
+        if (city != null && !city.isBlank()) {
+            try {
+                // Obtener los datos del clima usando el servicio
+                ClimaData climaData = weatherService.getCurrentweather(city);
+                
+                // Asignar los datos del clima a la Court (temporalmente solo para la vista)
+                court.setWeatherData(climaData); 
+                System.out.println("Clima obtenido para " + city + ": " + climaData.getDescription());
+                
+            } catch (Exception e) {
+                // Si la API falla o la ciudad es inválida, se registra el error y se omite el dato del clima
+                System.err.println("Error al obtener el clima para " + city + ": " + e.getMessage());
+                // court.weatherData seguirá siendo null (o el valor que tenía antes)
+            }
+        }
+        // ---------------------------------------------
+
+        model.addAttribute("court", court);
+        model.addAttribute("title", "Detalles de la Court");
+
+        return "admin/courts/view";
+    }
+
     @PostMapping("/courts")
     public String createCourt(@Valid Court court,
                               BindingResult result,
@@ -469,7 +508,7 @@ public class AdminController {
         try {
             courtService.update(id, court);
             redirectAttributes.addFlashAttribute("successMessage", "Court actualizada exitosamente");
-            return "redirect:/admin/courts";
+            return "redirect:/admin/courts/view";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "Error al actualizar court: " + e.getMessage());
             model.addAttribute("title", "Editar Court");
