@@ -6,6 +6,7 @@ import com.basketball.referee.model.User;
 import com.basketball.referee.service.UserService;
 import com.basketball.referee.repository.RefereeRepository;
 import com.basketball.referee.repository.UserRepository;
+import com.basketball.referee.interfaces.ImageUpload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +34,8 @@ public class RefereeService {
     @Autowired
     private UserService userService;
 
-    private final String uploadDir = "uploads/photos/";
+    @Autowired
+    private ImageUpload imageUpload;
 
     public List<Referee> findAll() {
         return refereeRepository.findAll();
@@ -102,7 +104,7 @@ public class RefereeService {
 
     public Referee createReferee(Referee referee, MultipartFile foto) {
         try {
-            String photoUrl = uploadPhoto(foto);
+            String photoUrl = imageUpload.uploadPhoto(foto);
             referee.setFotoUrl(photoUrl);
             referee.setActive(true);
             userService.createReferee(referee.getUser());
@@ -127,7 +129,7 @@ public class RefereeService {
             referee.setSpecialty(refereeDetails.getSpecialty());
             referee.setRank(refereeDetails.getRank());
             referee.setObservations(refereeDetails.getObservations());
-            referee.setFotoUrl(uploadPhoto(photo));
+            referee.setFotoUrl(imageUpload.uploadPhoto(photo));
             return refereeRepository.save(referee);
         }
         throw new RuntimeException("Árbitro no encontrado");
@@ -148,7 +150,7 @@ public class RefereeService {
         }
         throw new RuntimeException("Árbitro no encontrado");
     }
-
+/*
     public String uploadPhoto(MultipartFile file) throws IOException {
         if (file.isEmpty()) {
             return null;
@@ -171,12 +173,12 @@ public class RefereeService {
 
         return "/uploads/photos/" + filename;
     }
-
+*/
     public void updatePhoto(Long refereeId, MultipartFile file) throws IOException {
         Optional<Referee> refereeOpt = refereeRepository.findById(refereeId);
         if (refereeOpt.isPresent()) {
             Referee referee = refereeOpt.get();
-            String photoUrl = uploadPhoto(file);
+            String photoUrl = imageUpload.uploadPhoto(file);
             if (photoUrl != null) {
                 referee.setFotoUrl(photoUrl);
                 refereeRepository.save(referee);
