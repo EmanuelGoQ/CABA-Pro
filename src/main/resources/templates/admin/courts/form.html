@@ -54,6 +54,24 @@
                                         <div class="invalid-feedback" th:if="${#fields.hasErrors('address')}" 
                                              th:errors="*{address}"></div>
                                     </div>
+
+                                    <div class="col-md-12 mb-3">
+                                        <label for="city" class="form-label">Ciudad</label>
+                                        <input type="text" class="form-control" id="city" 
+                                               th:field="*{city}" required
+                                               placeholder="Dirección completa de la court">
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('city')}" 
+                                             th:errors="*{city}"></div>
+                                    </div>
+
+                                    <div class="col-md-12 mb-3">
+                                        <label for="phone" class="form-label">Teléfono</label>
+                                        <input type="text" class="form-control" id="phone" 
+                                               th:field="*{phone}" required
+                                               placeholder="Dirección completa de la court">
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('phone')}" 
+                                             th:errors="*{phone}"></div>
+                                    </div>
                                     
                                     <div class="col-md-6 mb-3">
                                         <div class="form-check mt-4">

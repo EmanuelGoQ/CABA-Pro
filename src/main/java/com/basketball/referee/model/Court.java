@@ -25,6 +25,9 @@ public class Court {
     private String city;
     
     private String phone;
+
+    @Embedded
+    private ClimaData weatherData;
     
     @Column(columnDefinition = "TEXT")
     private String observations;
@@ -139,5 +142,13 @@ public class Court {
     
     public void setMatches(List<Match> matches) {
         this.matches = matches;
+    }
+    
+    public ClimaData getWeatherData() {
+        return weatherData;
+    }
+
+    public void setWeatherData(ClimaData weatherData) {
+        this.weatherData = weatherData;
     }
 }
