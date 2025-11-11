@@ -15,28 +15,24 @@ import java.util.Locale;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    // === Tus recursos estáticos (NO TOCAR) ===
+    // === Recursos estáticos ===
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/uploads/**")
                 .addResourceLocations("file:uploads/");
-        
         registry.addResourceHandler("/css/**")
                 .addResourceLocations("classpath:/static/css/");
-        
         registry.addResourceHandler("/js/**")
                 .addResourceLocations("classpath:/static/js/");
-        
         registry.addResourceHandler("/images/**")
                 .addResourceLocations("classpath:/static/images/");
     }
 
     // === Internacionalización (i18n) ===
-
     @Bean
     public ResourceBundleMessageSource messageSource() {
         ResourceBundleMessageSource source = new ResourceBundleMessageSource();
-        source.setBasename("messages"); // busca messages.properties, messages_en.properties...
+        source.setBasename("messages"); // messages.properties, messages_en.properties...
         source.setDefaultEncoding("UTF-8");
         return source;
     }
@@ -44,14 +40,16 @@ public class WebConfig implements WebMvcConfigurer {
     @Bean
     public LocaleResolver localeResolver() {
         CookieLocaleResolver resolver = new CookieLocaleResolver();
-        resolver.setDefaultLocale(new Locale("es")); // idioma por defecto
+        resolver.setDefaultLocale(Locale.forLanguageTag("es"));
+        resolver.setCookieName("LANG_PREF"); // nombre de la cookie
+        resolver.setCookieMaxAge(60 * 60 * 24 * 30); // 30 días
         return resolver;
     }
 
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
         LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
-        interceptor.setParamName("lang"); // el parámetro que cambia el idioma en la URL
+        interceptor.setParamName("lang"); // cambia idioma con ?lang=xx
         return interceptor;
     }
 
