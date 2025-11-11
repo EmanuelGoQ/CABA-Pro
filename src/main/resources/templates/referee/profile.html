@@ -17,19 +17,19 @@
                                      class="profile-image">
                             </div>
                             
-                            <h4 th:text="${user.fullName}">Name Completo</h4>
+                            <h4 th:text="${user.fullName}">Nombre completo</h4>
                             <p class="text-muted mb-3" th:text="${user.email}">email@ejemplo.com</p>
                             
                             <div class="row text-center mb-3">
                                 <div class="col-6">
                                     <div class="border-end">
-                                        <div class="fw-bold text-primary" th:text="${referee.rank.displayName}">#{profile.rank}</div>
+                                        <div class="fw-bold text-primary" th:text="${referee.rank.displayName}">Escalafón</div>
                                         <small class="text-muted" th:text="#{profile.rank}">Escalafón</small>
                                     </div>
                                 </div>
                                 <div class="col-6">
-                                    <div class="fw-bold text-success" th:text="${referee.specialty.displayName}">#{profile.specialty}</div>
-                                    <small class="text-muted" th:text="#{profile.specialty}">Specialty</small>
+                                    <div class="fw-bold text-success" th:text="${referee.specialty.displayName}">Especialidad</div>
+                                    <small class="text-muted" th:text="#{profile.specialty}">Especialidad</small>
                                 </div>
                             </div>
 
@@ -56,36 +56,37 @@
                     <div class="card mb-4">
                         <div class="card-header">
                             <h5 class="mb-0">
-                                <i class="fas fa-user me-2"></i><span th:text="#{profile.personalInfo}">Información Personal</span>
+                                <i class="fas fa-user me-2"></i>
+                                <span th:text="#{profile.personalInfo}">Información Personal</span>
                             </h5>
                         </div>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label fw-bold" th:text="#{profile.document}">Document:</label>
+                                    <label class="form-label fw-bold" th:text="#{profile.document}">Documento</label>
                                     <p th:text="${referee.document}">-</p>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label fw-bold" th:text="#{profile.phone}">Teléfono:</label>
+                                    <label class="form-label fw-bold" th:text="#{profile.phone}">Teléfono</label>
                                     <p th:text="${referee.phone}">-</p>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label fw-bold" th:text="#{profile.birthdate}">Date de Nacimiento:</label>
+                                    <label class="form-label fw-bold" th:text="#{profile.birthdate}">Fecha de Nacimiento</label>
                                     <p th:text="${#temporals.format(referee.birthDate, 'dd/MM/yyyy')}">-</p>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label fw-bold" th:text="#{profile.state}">State:</label>
+                                    <label class="form-label fw-bold" th:text="#{profile.state}">Estado</label>
                                     <span th:class="'badge ' + (${referee.active} ? 'bg-success' : 'bg-danger')"
                                           th:text="${referee.active} ? #{profile.active} : #{profile.inactive}">
-                                        State
+                                        Estado
                                     </span>
                                 </div>
                                 <div class="col-12 mb-3" th:if="${referee.address}">
-                                    <label class="form-label fw-bold" th:text="#{profile.address}">Dirección:</label>
+                                    <label class="form-label fw-bold" th:text="#{profile.address}">Dirección</label>
                                     <p th:text="${referee.address}">-</p>
                                 </div>
                                 <div class="col-12" th:if="${referee.observations}">
-                                    <label class="form-label fw-bold" th:text="#{profile.observations}">Observations:</label>
+                                    <label class="form-label fw-bold" th:text="#{profile.observations}">Observaciones</label>
                                     <p th:text="${referee.observations}">-</p>
                                 </div>
                             </div>
@@ -95,25 +96,26 @@
                     <div class="card">
                         <div class="card-header">
                             <h5 class="mb-0">
-                                <i class="fas fa-cog me-2"></i><span th:text="#{profile.accountInfo}">Información de Cuenta</span>
+                                <i class="fas fa-cog me-2"></i>
+                                <span th:text="#{profile.accountInfo}">Información de Cuenta</span>
                             </h5>
                         </div>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label fw-bold" th:text="#{profile.username}">Usuario:</label>
+                                    <label class="form-label fw-bold" th:text="#{profile.username}">Usuario</label>
                                     <p th:text="${user.username}">-</p>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label fw-bold" th:text="#{profile.email}">Email:</label>
+                                    <label class="form-label fw-bold" th:text="#{profile.email}">Email</label>
                                     <p th:text="${user.email}">-</p>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label fw-bold" th:text="#{profile.registrationDate}">Date de Registro:</label>
+                                    <label class="form-label fw-bold" th:text="#{profile.registrationDate}">Fecha de Registro</label>
                                     <p th:text="${#temporals.format(user.createdAt, 'dd/MM/yyyy HH:mm')}">-</p>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label fw-bold" th:text="#{profile.lastUpdate}">Última Actualización:</label>
+                                    <label class="form-label fw-bold" th:text="#{profile.lastUpdate}">Última Actualización</label>
                                     <p th:text="${#temporals.format(referee.updatedAt, 'dd/MM/yyyy HH:mm')}">-</p>
                                 </div>
                             </div>
