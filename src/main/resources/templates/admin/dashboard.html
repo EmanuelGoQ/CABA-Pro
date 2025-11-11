@@ -6,259 +6,255 @@
   layout:decorate="~{layout/base}"
 >
   <head>
-    <title>Dashboard Administrativo</title>
+    <title th:text="#{dashboard.title}">Dashboard Administrativo</title>
   </head>
 
-  
-    <!-- Contenido principal -->
-    <div layout:fragment="content">
-      <div class="container-fluid">
-        <!-- Header -->
-        <div class="row mb-4">
-          <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center">
-              <div>
-                <h1 class="h3 mb-0">Dashboard Administrativo</h1>
-                <p class="text-muted mb-0">Panel de control del sistema</p>
+  <!-- Contenido principal -->
+  <div layout:fragment="content">
+    <div class="container-fluid">
+      <!-- Header -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h1 class="h3 mb-0" th:text="#{dashboard.title}">Dashboard Administrativo</h1>
+              <p class="text-muted mb-0" th:text="#{dashboard.subtitle}">Panel de control del sistema</p>
+            </div>
+            <div class="d-flex gap-2">
+              <a th:href="@{/admin/referees/new}" class="btn btn-success">
+                <i class="fas fa-user-plus me-2"></i><span th:text="#{dashboard.newReferee}">Nuevo Árbitro</span>
+              </a>
+              <a th:href="@{/admin/tournaments/new}" class="btn btn-primary">
+                <i class="fas fa-trophy me-2"></i><span th:text="#{dashboard.newTournament}">Nuevo Torneo</span>
+              </a>
+              <a th:href="@{/admin/financial/dashboard}" class="btn btn-primary">
+                <i class="fas fa-dollar me-2"></i><span th:text="#{dashboard.financial}">Financiero</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Statistics Cards -->
+      <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card dashboard-card bg-primary">
+            <div class="card-body text-center">
+              <i class="fas fa-users card-icon"></i>
+              <div class="card-number" th:text="${totalReferees}">0</div>
+              <h6 class="card-title mb-0" th:text="#{dashboard.activeReferees}">Árbitros Activos</h6>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card dashboard-card bg-success">
+            <div class="card-body text-center">
+              <i class="fas fa-trophy card-icon"></i>
+              <div class="card-number" th:text="${totalTournaments}">0</div>
+              <h6 class="card-title mb-0" th:text="#{dashboard.activeTournaments}">Torneos Activos</h6>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card dashboard-card bg-info">
+            <div class="card-body text-center">
+              <i class="fas fa-map-marker-alt card-icon"></i>
+              <div class="card-number" th:text="${totalCourts}">0</div>
+              <h6 class="card-title mb-0" th:text="#{dashboard.availableCourts}">Canchas Disponibles</h6>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card dashboard-card bg-warning">
+            <div class="card-body text-center">
+              <i class="fas fa-basketball-ball card-icon"></i>
+              <div class="card-number" th:text="${matchesProgramados}">0</div>
+              <h6 class="card-title mb-0" th:text="#{dashboard.scheduledMatches}">Partidos Programados</h6>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Assignment Statistics -->
+      <div class="row mb-4">
+        <div class="col-md-6 mb-4">
+          <div class="card">
+            <div class="card-header bg-light">
+              <h5 class="mb-0">
+                <i class="fas fa-chart-pie me-2"></i><span th:text="#{dashboard.assignmentStatus}">Estado de Asignaciones</span>
+              </h5>
+            </div>
+            <div class="row">
+              <div class="col-md-3 mb-3">
+                <div class="card shadow-sm text-center">
+                  <div class="card-body">
+                    <h6 class="text-muted" th:text="#{dashboard.pending}">Pendientes</h6>
+                    <h3 th:text="${assignmentsPendientes}">0</h3>
+                  </div>
+                </div>
               </div>
-              <div class="d-flex gap-2">
-                <a th:href="@{/admin/referees/new}" class="btn btn-success">
-                  <i class="fas fa-user-plus me-2"></i>Nuevo Árbitro
+              <div class="col-md-3 mb-3">
+                <div class="card shadow-sm text-center">
+                  <div class="card-body">
+                    <h6 class="text-muted" th:text="#{dashboard.accepted}">Aceptadas</h6>
+                    <h3 th:text="${assignmentsAceptadas}">0</h3>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3 mb-3">
+                <div class="card shadow-sm text-center">
+                  <div class="card-body">
+                    <h6 class="text-muted" th:text="#{dashboard.rejected}">Rechazadas</h6>
+                    <h3 th:text="${assignmentsRechazadas}">0</h3>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3 mb-3">
+                <div class="card shadow-sm text-center">
+                  <div class="card-body">
+                    <h6 class="text-muted" th:text="#{dashboard.completed}">Completadas</h6>
+                    <h3 th:text="${assignmentsCompletadas}">0</h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-center mt-4">
+              <a th:href="@{/admin/assignments}" class="btn btn-primary" th:text="#{dashboard.manageAssignments}">
+                Gestionar Asignaciones
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+          <div class="card">
+            <div class="card-header bg-light">
+              <h5 class="mb-0">
+                <i class="fas fa-bolt me-2"></i><span th:text="#{dashboard.quickActions}">Acciones Rápidas</span>
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="d-grid gap-2">
+                <a th:href="@{/admin/referees}" class="btn btn-outline-primary">
+                  <i class="fas fa-users me-2"></i><span th:text="#{dashboard.manageReferees}">Gestionar Árbitros</span>
                 </a>
-                <a th:href="@{/admin/tournaments/new}" class="btn btn-primary">
-                  <i class="fas fa-trophy me-2"></i>Nuevo Tournament
+                <a th:href="@{/admin/tournaments}" class="btn btn-outline-success">
+                  <i class="fas fa-trophy me-2"></i><span th:text="#{dashboard.manageTournaments}">Gestionar Torneos</span>
                 </a>
-                <a th:href="@{/admin/financial/dashboard}" class="btn btn-primary">
-                  <i class="fas fa-dollar me-2"></i>Financiero
+                <a th:href="@{/admin/courts}" class="btn btn-outline-info">
+                  <i class="fas fa-map-marker-alt me-2"></i><span th:text="#{dashboard.manageCourts}">Gestionar Canchas</span>
+                </a>
+                <a th:href="@{/admin/matches}" class="btn btn-outline-info">
+                  <i class="fas fa-basketball-ball me-2"></i><span th:text="#{dashboard.manageMatches}">Gestionar Partidos</span>
                 </a>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Statistics Cards -->
-        <div class="row mb-4">
-          <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card dashboard-card bg-primary">
-              <div class="card-body text-center">
-                <i class="fas fa-users card-icon"></i>
-                <div class="card-number" th:text="${totalReferees}">0</div>
-                <h6 class="card-title mb-0">Árbitros Activos</h6>
-              </div>
+      <!-- Recent Referees, Current Tournaments, Top Referees -->
+      <div class="row">
+        <!-- Recent Referees -->
+        <div class="col-lg-4 mb-4">
+          <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5 class="mb-0">
+                <i class="fas fa-user-plus me-2"></i><span th:text="#{dashboard.recentReferees}">Árbitros Recientes</span>
+              </h5>
+              <a th:href="@{/admin/referees}" class="btn btn-sm btn-outline-primary" th:text="#{dashboard.viewAll}">Ver Todos</a>
             </div>
-          </div>
-
-          <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card dashboard-card bg-success">
-              <div class="card-body text-center">
-                <i class="fas fa-trophy card-icon"></i>
-                <div class="card-number" th:text="${totalTournaments}">0</div>
-                <h6 class="card-title mb-0">Torneos Activos</h6>
+            <div class="card-body">
+              <div th:if="${#lists.isEmpty(recentReferees)}" class="text-center py-3">
+                <i class="fas fa-users text-muted" style="font-size: 2rem"></i>
+                <p class="text-muted mt-2 mb-0" th:text="#{dashboard.noReferees}">No hay árbitros registrados</p>
               </div>
-            </div>
-          </div>
-
-          <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card dashboard-card bg-info">
-              <div class="card-body text-center">
-                <i class="fas fa-map-marker-alt card-icon"></i>
-                <div class="card-number" th:text="${totalCourts}">0</div>
-                <h6 class="card-title mb-0">Canchas Disponibles</h6>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card dashboard-card bg-warning">
-              <div class="card-body text-center">
-                <i class="fas fa-basketball-ball card-icon"></i>
-                <div class="card-number" th:text="${matchesProgramados}">0</div>
-                <h6 class="card-title mb-0">Partidos Programados</h6>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Assignment Statistics -->
-        <div class="row mb-4">
-          <div class="col-md-6 mb-4">
-            <div class="card">
-              <div class="card-header bg-light">
-                <h5 class="mb-0">
-                  <i class="fas fa-chart-pie me-2"></i>Estado de Asignaciones
-                </h5>
-              </div>
-              <div class="row">
-                <div class="col-md-3 mb-3">
-                  <div class="card shadow-sm text-center">
-                    <div class="card-body">
-                      <h6 class="text-muted">Pendientes</h6>
-                      <h3 th:text="${assignmentsPendientes}">0</h3>
+              <div th:if="${!#lists.isEmpty(recentReferees)}">
+                <div th:each="referee : ${recentReferees}" class="d-flex align-items-center mb-3">
+                  <div class="flex-shrink-0 me-3">
+                    <img th:src="${referee.urlPhoto != null ? referee.urlPhoto : '/images/default-avatar.png'}"
+                         alt="Avatar" class="profile-image-small" />
+                  </div>
+                  <div class="flex-grow-1">
+                    <div class="fw-bold" th:text="${referee.user.fullName}">Nombre</div>
+                    <div class="text-muted small">
+                      <span th:text="${referee.rank.displayName}">Escalafón</span> -
+                      <span th:text="${referee.specialty.displayName}">Especialidad</span>
                     </div>
                   </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                  <div class="card shadow-sm text-center">
-                    <div class="card-body">
-                      <h6 class="text-muted">Aceptadas</h6>
-                      <h3 th:text="${assignmentsAceptadas}">0</h3>
-                    </div>
+                  <div class="flex-shrink-0">
+                    <span th:class="'badge ' + (${referee.active} ? 'bg-success' : 'bg-danger')"
+                          th:text="${referee.active} ? #{dashboard.active} : #{dashboard.inactive}">Estado</span>
                   </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                  <div class="card shadow-sm text-center">
-                    <div class="card-body">
-                      <h6 class="text-muted">Rechazadas</h6>
-                      <h3 th:text="${assignmentsRechazadas}">0</h3>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                  <div class="card shadow-sm text-center">
-                    <div class="card-body">
-                      <h6 class="text-muted">Completadas</h6>
-                      <h3 th:text="${assignmentsCompletadas}">0</h3>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="text-center mt-4">
-                <a th:href="@{/admin/assignments}" class="btn btn-primary">
-                  Gestionar Asignaciones
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-6 mb-4">
-            <div class="card">
-              <div class="card-header bg-light">
-                <h5 class="mb-0">
-                  <i class="fas fa-bolt me-2"></i>Acciones Rápidas
-                </h5>
-              </div>
-              <div class="card-body">
-                <div class="d-grid gap-2">
-                  <a th:href="@{/admin/referees}" class="btn btn-outline-primary">
-                    <i class="fas fa-users me-2"></i>Gestionar Árbitros
-                  </a>
-                  <a th:href="@{/admin/tournaments}" class="btn btn-outline-success">
-                    <i class="fas fa-trophy me-2"></i>Gestionar Torneos
-                  </a>
-                  <a th:href="@{/admin/courts}" class="btn btn-outline-info">
-                    <i class="fas fa-map-marker-alt me-2"></i>Gestionar Canchas
-                  </a>
-                  <a th:href="@{/admin/matches}" class="btn btn-outline-info">
-                    <i class="fas fa-basketball-ball me-2"></i>Gestionar Partidos
-                  </a>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="row">
-          <!-- Recent Referees -->
-          <div class="col-lg-4 mb-4">
-            <div class="card">
-              <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">
-                  <i class="fas fa-user-plus me-2"></i>Árbitros Recientes
-                </h5>
-                <a th:href="@{/admin/referees}" class="btn btn-sm btn-outline-primary">Ver Todos</a>
+        <!-- Current Tournaments -->
+        <div class="col-lg-4 mb-4">
+          <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5 class="mb-0">
+                <i class="fas fa-trophy me-2"></i><span th:text="#{dashboard.currentTournaments}">Torneos en Curso</span>
+              </h5>
+              <a th:href="@{/admin/tournaments}" class="btn btn-sm btn-outline-primary" th:text="#{dashboard.viewAll}">Ver Todos</a>
+            </div>
+            <div class="card-body">
+              <div th:if="${#lists.isEmpty(currentTournaments)}" class="text-center py-3">
+                <i class="fas fa-trophy text-muted" style="font-size: 2rem"></i>
+                <p class="text-muted mt-2 mb-0" th:text="#{dashboard.noTournaments}">No hay torneos en curso</p>
               </div>
-              <div class="card-body">
-                <div th:if="${#lists.isEmpty(recentReferees)}" class="text-center py-3">
-                  <i class="fas fa-users text-muted" style="font-size: 2rem"></i>
-                  <p class="text-muted mt-2 mb-0">No hay árbitros registrados</p>
+              <div th:if="${!#lists.isEmpty(currentTournaments)}">
+                <div th:each="tournament : ${currentTournaments}" class="border-bottom pb-2 mb-3">
+                  <div class="fw-bold" th:text="${tournament.name}">Torneo</div>
+                  <div class="text-muted small">
+                    <i class="fas fa-calendar me-1"></i>
+                    <span th:text="${#temporals.format(tournament.startDate, 'dd/MM/yyyy')}">Inicio</span> -
+                    <span th:text="${#temporals.format(tournament.endDate, 'dd/MM/yyyy')}">Fin</span>
+                  </div>
+                  <span class="badge bg-success mt-1" th:text="${tournament.state.displayName}">Estado</span>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-                <div th:if="${!#lists.isEmpty(recentReferees)}">
-                  <div th:each="referee : ${recentReferees}" class="d-flex align-items-center mb-3">
-                    <div class="flex-shrink-0 me-3">
+        <!-- Top Referees -->
+        <div class="col-lg-4 mb-4">
+          <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5 class="mb-0">
+                <i class="fas fa-star me-2"></i><span th:text="#{dashboard.topReferees}">Top 5 Árbitros del Mes</span>
+              </h5>
+            </div>
+            <div class="card-body">
+              <div th:if="${#lists.isEmpty(topReferees)}" class="text-center py-3">
+                <i class="fas fa-medal text-muted" style="font-size: 2rem"></i>
+                <p class="text-muted mt-2 mb-0" th:text="#{dashboard.noData}">No hay datos disponibles</p>
+              </div>
+              <div th:if="${!#lists.isEmpty(topReferees)}">
+                <div th:each="referee, iterStat : ${topReferees}" class="d-flex align-items-center mb-3">
+                  <div class="flex-shrink-0 me-3">
+                    <div class="position-relative">
                       <img th:src="${referee.urlPhoto != null ? referee.urlPhoto : '/images/default-avatar.png'}"
                            alt="Avatar" class="profile-image-small" />
-                    </div>
-                    <div class="flex-grow-1">
-                      <div class="fw-bold" th:text="${referee.user.fullName}">Nombre</div>
-                      <div class="text-muted small">
-                        <span th:text="${referee.rank.displayName}">Escalafón</span> -
-                        <span th:text="${referee.specialty.displayName}">Especialidad</span>
-                      </div>
-                    </div>
-                    <div class="flex-shrink-0">
-                      <span th:class="'badge ' + (${referee.active} ? 'bg-success' : 'bg-danger')"
-                            th:text="${referee.active} ? 'Activo' : 'Inactivo'">Estado</span>
+                      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
+                        <span th:text="${iterStat.index + 1}">1</span>
+                      </span>
                     </div>
                   </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Current Tournaments -->
-          <div class="col-lg-4 mb-4">
-            <div class="card">
-              <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">
-                  <i class="fas fa-trophy me-2"></i>Torneos en Curso
-                </h5>
-                <a th:href="@{/admin/tournaments}" class="btn btn-sm btn-outline-primary">Ver Todos</a>
-              </div>
-              <div class="card-body">
-                <div th:if="${#lists.isEmpty(currentTournaments)}" class="text-center py-3">
-                  <i class="fas fa-trophy text-muted" style="font-size: 2rem"></i>
-                  <p class="text-muted mt-2 mb-0">No hay torneos en curso</p>
-                </div>
-
-                <div th:if="${!#lists.isEmpty(currentTournaments)}">
-                  <div th:each="tournament : ${currentTournaments}" class="border-bottom pb-2 mb-3">
-                    <div class="fw-bold" th:text="${tournament.name}">Torneo</div>
+                  <div class="flex-grow-1">
+                    <div class="fw-bold" th:text="${referee.user.fullName}">Nombre</div>
                     <div class="text-muted small">
-                      <i class="fas fa-calendar me-1"></i>
-                      <span th:text="${#temporals.format(tournament.startDate, 'dd/MM/yyyy')}">Inicio</span> -
-                      <span th:text="${#temporals.format(tournament.endDate, 'dd/MM/yyyy')}">Fin</span>
-                    </div>
-                    <span class="badge bg-success mt-1"
-                          th:text="${tournament.state.displayName}">Estado</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Top Referees -->
-          <div class="col-lg-4 mb-4">
-            <div class="card">
-              <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">
-                  <i class="fas fa-star me-2"></i>Top 5 Árbitros del Mes
-                </h5>
-              </div>
-              <div class="card-body">
-                <div th:if="${#lists.isEmpty(topReferees)}" class="text-center py-3">
-                  <i class="fas fa-medal text-muted" style="font-size: 2rem"></i>
-                  <p class="text-muted mt-2 mb-0">No hay datos disponibles</p>
-                </div>
-
-                <div th:if="${!#lists.isEmpty(topReferees)}">
-                  <div th:each="referee, iterStat : ${topReferees}" class="d-flex align-items-center mb-3">
-                    <div class="flex-shrink-0 me-3">
-                      <div class="position-relative">
-                        <img th:src="${referee.urlPhoto != null ? referee.urlPhoto : '/images/default-avatar.png'}"
-                             alt="Avatar" class="profile-image-small" />
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
-                          <span th:text="${iterStat.index + 1}">1</span>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="flex-grow-1">
-                      <div class="fw-bold" th:text="${referee.user.fullName}">Nombre</div>
-                      <div class="text-muted small">
-                        <i class="fas fa-basketball-ball me-1"></i>
-                        <span th:text="${referee.matchesArbitrados}">0</span> partidos
-                      </div>
+                      <i class="fas fa-basketball-ball me-1"></i>
+                      <span th:text="${referee.matchesArbitrados}">0</span>
+                      <span th:text="#{dashboard.matches}">partidos</span>
                     </div>
                   </div>
                 </div>
@@ -268,5 +264,5 @@
         </div>
       </div>
     </div>
-  </html>
-
+  </div>
+</html>

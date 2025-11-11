@@ -2,7 +2,7 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/base}">
 <head>
-    <title>Acceso Denegado</title>
+    <title th:text="#{access.denied.title}">Acceso Denegado</title>
 </head>
 <body>
     <div layout:fragment="content">
@@ -12,16 +12,18 @@
                     <div class="card">
                         <div class="card-body text-center py-5">
                             <i class="fas fa-ban text-danger" style="font-size: 4rem;"></i>
-                            <h1 class="mt-4 mb-3">Acceso Denegado</h1>
-                            <p class="lead text-muted mb-4">
+                            <h1 class="mt-4 mb-3" th:text="#{access.denied.header}">Acceso Denegado</h1>
+                            <p class="lead text-muted mb-4" th:text="#{access.denied.message}">
                                 No tiene permisos para acceder a esta página.
                             </p>
                             <div class="d-flex justify-content-center gap-3">
                                 <a th:href="@{/dashboard}" class="btn btn-primary">
-                                    <i class="fas fa-home me-2"></i>Ir al Dashboard
+                                    <i class="fas fa-home me-2"></i>
+                                    <span th:text="#{access.denied.button.dashboard}">Ir al Dashboard</span>
                                 </a>
                                 <a href="javascript:history.back()" class="btn btn-secondary">
-                                    <i class="fas fa-arrow-left me-2"></i>Volver
+                                    <i class="fas fa-arrow-left me-2"></i>
+                                    <span th:text="#{access.denied.button.back}">Volver</span>
                                 </a>
                             </div>
                         </div>
